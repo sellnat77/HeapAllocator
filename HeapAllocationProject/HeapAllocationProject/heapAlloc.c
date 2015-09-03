@@ -8,6 +8,7 @@ void* nextFree;
 
 char memoryHeap[1000];
 int poolSize = arrElements(memoryHeap);
+int HdrSize;
 
 void initMemory();
 void* hAllocate(int);
@@ -17,7 +18,9 @@ int main()
 {
 	initMemory();
 
-	printf("Heap at 0 is : %s",memoryHeap[0] );
+	printf("Heap at 0 is : %c",memoryHeap[0] );
+	hAllocate(4);
+	printf("Heap at 0 is : %c", memoryHeap[0]);
 
 	return 0;
 }
@@ -35,6 +38,15 @@ void initMemory()
 void* hAllocate(int sizeToAlloc)
 {
 	void* beginOfAlloc = NULL;
+
+	int sizeLeft = poolSize - sizeToAlloc;
+	//int nextPointer = ;
+
+	HdrSize = sizeof(sizeLeft); //+ sizeof(nextFree);
+
+	poolSize -= (sizeToAlloc + HdrSize);
+
+
 
 	return beginOfAlloc;
 }
