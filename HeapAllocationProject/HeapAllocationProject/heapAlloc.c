@@ -17,7 +17,7 @@ void hDeallocate(void*);
 int main()
 {
 	initMemory();
-
+	printf("Free head pointer is at %d", freeHead);
 	printf("Heap at 0 is : %c",memoryHeap[0] );
 	hAllocate(4);
 	printf("Heap at 0 is : %c", memoryHeap[0]);
@@ -33,6 +33,8 @@ void initMemory()
 	{
 		memoryHeap[k] = '0';
 	}	
+
+	freeHead = memoryHeap[0];
 }
 
 void* hAllocate(int sizeToAlloc)
@@ -40,11 +42,14 @@ void* hAllocate(int sizeToAlloc)
 	void* beginOfAlloc = NULL;
 
 	int sizeLeft = poolSize - sizeToAlloc;
-	//int nextPointer = ;
+	int nextPointer = poolSize - sizeof(int*);
 
-	HdrSize = sizeof(sizeLeft); //+ sizeof(nextFree);
-
+	HdrSize = sizeof(sizeLeft) + sizeof(nextPointer);
+	printf("\nSize of header is %d \n", HdrSize);
+	printf("Pool size before allocation is %d \n", poolSize);
 	poolSize -= (sizeToAlloc + HdrSize);
+	printf("Pool size after allocation is %d \n", poolSize);
+
 
 
 
