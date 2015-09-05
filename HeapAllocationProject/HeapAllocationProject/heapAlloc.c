@@ -30,17 +30,23 @@ int main()
 	printf("\nFree head pointer is at %d\n", &freeHead);
 	printf("\nHeap at 0 is : %c\n",memoryHeap[0] );
 	int* a = hAllocate(8);
+	printf("\nAddress of allocation is : %d\n", &a);
+	printf("\nValue of allocation in heap is : %d\n", a);
 	printHeap();
 	hDeallocate(a);
 	printf("\n");
 	printf("\nFree head pointer is at %d\n", &freeHead);
 	printf("\nHeap at 0 is : %c\n", memoryHeap[0]);
-	hAllocate(16);
+	a = hAllocate(16);
+	printf("\nAddress of allocation is : %d\n", &a);
+	printf("\nValue of allocation in heap is : %d\n", a);
 	printf("\n\n\n\n");
 	printHeap();
 	printf("\nFree head pointer is at %d\n", &freeHead);
 	printf("\nHeap at 0 is : %c\n", memoryHeap[0]);
-	hAllocate(50);
+	a = hAllocate(50);
+	printf("\nAddress of allocation is : %d\n", &a);
+	printf("\nValue of allocation in heap is : %d\n", a);
 	printf("\n\n\n\n");
 	printHeap();
 	printf("\nFree head pointer is at %d\n", &freeHead);
@@ -161,13 +167,24 @@ void hDeallocate(int* beginOfAlloc)
 	printf("Data is ");
 	for (k = 0; k < sizeof(int); k++)
 	{
-		printf("%d", (int)memoryHeap[dataidx-(k+1)]);
+		printf("%d", (int)memoryHeap[(dataidx-1)-(k+1)]);
+	}
+	printf("\n\nBefore deallocation: ");
+	for (k = 0; k < sizeof(int); k++)
+	{
+		printf("%c", memoryHeap[dataidx - (k + 1)]);
+	}
+	for (k = 0; k < sizeof(int); k++)
+	{
+		memoryHeap[(dataidx - 1) + k] = '0';
+	}
+	printf("\n\nAfter deallocation:");
+	for (k = 0; k < sizeof(int); k++)
+	{
+		printf("%c", memoryHeap[dataidx - (k + 1)]);
 	}
 
-	printf("\n\n\n");
-	
-
-	
+	printf("\n\n\n");	
 }
 
 void printHeap()
