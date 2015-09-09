@@ -35,7 +35,12 @@ int main()
 {
 	printf("%d is the size of a void pointer",ptrSize);
 	my_initialize_heap(poolSize);
-	my_alloc(20);
+	void* ptr = my_alloc(12);
+	printf("Post split data block left: %d\n", *(int*)ptr);
+	my_alloc(12);
+	my_alloc(12);
+	my_alloc(12);
+	my_alloc(12);
 	//initMemory();
 	printf("Free head pointer is at %d", freeHead);
 	printf("Heap at 0 is : %c",memoryHeap[0] );
@@ -51,15 +56,13 @@ void my_initialize_heap(int size)
 
 	//Null pointer
 	//*((int*)(*freeHead + intSize)) = 0;
-	*((int*)(&freeHead + intSize)) = 0;
-	*(int*)(freeHead) = poolSize - overHead;
+	*((int*)freeHead + intSize) = 0;
+	poolSize -= overHead;
+	*(int*)(freeHead) = poolSize;
 
-	printf("Address of pointer: %p\n", &freeHead);
-	printf("Value of pointer: %p\n", freeHead);
-	printf("Value at pointer: %d\n", (int*)freeHead);
+	printf("Initial data block left: %d\n", *(int*)freeHead);
 	
-	printf("Address of pointer: %p\n", (&freeHead+intSize));
-	printf("Value at pointer: %d\n", (int*)freeHead + intSize);
+	printf("Initial next pointer: %d\n", *((int*)freeHead+intSize));
 	//Break into block structure
 	// | size | pointer | ******Everything********** |
 }
@@ -78,9 +81,44 @@ void initMemory()
 
 void* my_alloc(int size)
 {
+	int sizeLeft;
+	int *nextPointer;
+	int data;
+
 	printf("Address of pointer: %p\n", &freeHead);
 	printf("Value of pointer: %p\n", freeHead);
 	printf("Value at pointer: %d\n", (int*)freeHead);
+
+	void* ptr = freeHead;
+
+	while (*(int*)ptr < size)
+	{
+		ptr = (int*)ptr + intSize;
+	}
+
+	//ptr is at  ->| size | ptr | data | of an accomadating block
+
+	/**((int*)freeHead + intSize) = 0;
+	*(int*)(freeHead) = poolSize - overHead;
+
+	printf("Initial data block left: %d\n", *(int*)freeHead);
+
+	printf("Initial next pointer: %d\n", *((int*)freeHead + intSize));*/
+
+	*(int*)(ptr) = size;
+	*((int*)ptr + intSize) = *(int*)ptr + overHead + size;
+	poolSize -= (size + overHead);
+	*((int*)ptr + size + overHead) = poolSize;
+	
+	freeHead = (int*)ptr + overHead + size;
+
+	printf("Allocated data block left: %d\n", *(int*)ptr);
+
+	printf("Allocated next pointer: %d\n", *((int*)ptr + intSize));
+
+	printf("Post split data block left: %d\n", *((int*)ptr+overHead+size));
+
+	return ptr;
 	// Walk free list
 		// Do I need a list structure? or metaphorical list?
 	// Find a suitable block
