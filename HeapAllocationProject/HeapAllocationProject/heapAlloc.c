@@ -3,19 +3,26 @@
 // Get the length of an array
 #define arrElements(x) ( sizeof(x)/sizeof(x[0]) );	
 
+
 void* freeHead;
 void* nextFree;
 
 char memoryHeap[1000];
 int poolSize = arrElements(memoryHeap);
 int HdrSize;
+const int ptrSize = sizeof(void*);
+const int overHead = sizeof(void*) + sizeof(int);
 
+void my_initialize_heap(int);
 void initMemory();
+
+void* my_alloc(int);
 void* hAllocate(int);
 void hDeallocate(void*);
 
 int main()
 {
+	printf("%d is the size of a void pointer",ptrSize);
 	initMemory();
 	printf("Free head pointer is at %d", freeHead);
 	printf("Heap at 0 is : %c",memoryHeap[0] );
@@ -23,6 +30,11 @@ int main()
 	printf("Heap at 0 is : %c", memoryHeap[0]);
 
 	return 0;
+}
+
+void my_initialize_heap(int size)
+{
+	freeHead = malloc(size);
 }
 
 void initMemory()
@@ -35,6 +47,11 @@ void initMemory()
 	}	
 
 	freeHead = memoryHeap[0];
+}
+
+void* my_alloc(int size)
+{
+
 }
 
 void* hAllocate(int sizeToAlloc)
