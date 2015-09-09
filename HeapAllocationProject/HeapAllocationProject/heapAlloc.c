@@ -25,10 +25,12 @@ void hDeallocate(void*);
 int main()
 {
 	printf("%d is the size of a void pointer",ptrSize);
-	initMemory();
+	my_initialize_heap(poolSize);
+	my_alloc(20);
+	//initMemory();
 	printf("Free head pointer is at %d", freeHead);
 	printf("Heap at 0 is : %c",memoryHeap[0] );
-	hAllocate(4);
+	//hAllocate(4);
 	printf("Heap at 0 is : %c", memoryHeap[0]);
 
 	return 0;
@@ -53,6 +55,9 @@ void initMemory()
 
 void* my_alloc(int size)
 {
+	printf("Address of pointer: %p\n", &freeHead);
+	printf("Value of pointer: %p\n", freeHead);
+	printf("Value at pointer: %d\n", (int*)freeHead);
 	// Walk free list
 		// Do I need a list structure? or metaphorical list?
 	// Find a suitable block
