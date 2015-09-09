@@ -36,11 +36,21 @@ int main()
 	printf("%d is the size of a void pointer",ptrSize);
 	my_initialize_heap(poolSize);
 	void* ptr = my_alloc(12);
-	printf("Post split data block left: %d\n", *(int*)ptr);
-	my_alloc(12);
-	my_alloc(12);
-	my_alloc(12);
-	my_alloc(12);
+	myFree(ptr);
+	printf("\t\tReturned Ptr Address: %d\n", (int*)ptr);
+	printf("Free head pointer is at %d\n\n", freeHead);
+	ptr = my_alloc(12);
+	printf("\t\tReturned Ptr Address: %d\n", (int*)ptr);
+	printf("Free head pointer is at %d\n\n", freeHead);
+	ptr = my_alloc(12);
+	printf("\t\tReturned Ptr Address: %d\n", (int*)ptr);
+	printf("Free head pointer is at %d\n\n", freeHead);
+	ptr = my_alloc(12);
+	printf("\t\tReturned Ptr Address: %d\n", (int*)ptr);
+	printf("Free head pointer is at %d\n\n", freeHead);
+	ptr = my_alloc(12);
+	printf("\t\tReturned Ptr Address: %d\n", (int*)ptr);
+	printf("Free head pointer is at %d\n\n", freeHead);
 	//initMemory();
 	printf("Free head pointer is at %d", freeHead);
 	printf("Heap at 0 is : %c",memoryHeap[0] );
@@ -106,7 +116,7 @@ void* my_alloc(int size)
 	printf("Initial next pointer: %d\n", *((int*)freeHead + intSize));*/
 
 	*(int*)(ptr) = size;
-	*((int*)ptr + intSize) = *(int*)ptr + overHead + size;
+	*((int*)ptr + intSize) = (int*)ptr + overHead + size;
 	poolSize -= (size + overHead);
 	*((int*)ptr + size + overHead) = poolSize;
 	
@@ -114,7 +124,7 @@ void* my_alloc(int size)
 
 	printf("Allocated data block left: %d\n", *(int*)ptr);
 
-	printf("Allocated next pointer: %d\n", *((int*)ptr + intSize));
+	printf("\tAllocated next pointer: %d\n", *((int*)ptr + intSize));
 
 	printf("Post split data block left: %d\n", *((int*)ptr+overHead+size));
 
@@ -148,7 +158,8 @@ void* hAllocate(int sizeToAlloc)
 
 void myFree(void *startOfData)
 {
-
+	// "Can be as easy as making this block the new free head"
+	freeHead = startOfData;
 }
 
 void hDeallocate(void* beginOfAlloc)
