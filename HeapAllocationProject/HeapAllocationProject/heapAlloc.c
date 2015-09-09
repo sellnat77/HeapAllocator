@@ -3,14 +3,23 @@
 // Get the length of an array
 #define arrElements(x) ( sizeof(x)/sizeof(x[0]) );	
 
+struct node
+{
+	int size;
+	struct node *nextNode;
+	void* data;
+};
 
 void* freeHead;
 void* nextFree;
+
+struct node *rootNode;
 
 char memoryHeap[1000];
 int poolSize = arrElements(memoryHeap);
 int HdrSize;
 const int ptrSize = sizeof(void*);
+const int intSize = sizeof(int);
 const int overHead = sizeof(void*) + sizeof(int);
 
 void my_initialize_heap(int);
@@ -39,6 +48,20 @@ int main()
 void my_initialize_heap(int size)
 {
 	freeHead = malloc(size);
+
+	//Null pointer
+	//*((int*)(*freeHead + intSize)) = 0;
+	*((int*)(&freeHead + intSize)) = 0;
+	*(int*)(freeHead) = poolSize - overHead;
+
+	printf("Address of pointer: %p\n", &freeHead);
+	printf("Value of pointer: %p\n", freeHead);
+	printf("Value at pointer: %d\n", (int*)freeHead);
+	
+	printf("Address of pointer: %p\n", (&freeHead+intSize));
+	printf("Value at pointer: %d\n", (int*)freeHead + intSize);
+	//Break into block structure
+	// | size | pointer | ******Everything********** |
 }
 
 void initMemory()
