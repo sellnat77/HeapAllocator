@@ -33,29 +33,19 @@ void hDeallocate(void*);
 
 int main()
 {
-	printf("%d is the size of a void pointer",ptrSize);
 	my_initialize_heap(poolSize);
-	void* ptr = my_alloc(12);
-	myFree(ptr);
-	printf("\t\tReturned Ptr Address: %d\n", (int*)ptr);
-	printf("Free head pointer is at %d\n\n", freeHead);
-	ptr = my_alloc(12);
-	printf("\t\tReturned Ptr Address: %d\n", (int*)ptr);
-	printf("Free head pointer is at %d\n\n", freeHead);
-	ptr = my_alloc(12);
-	printf("\t\tReturned Ptr Address: %d\n", (int*)ptr);
-	printf("Free head pointer is at %d\n\n", freeHead);
-	ptr = my_alloc(12);
-	printf("\t\tReturned Ptr Address: %d\n", (int*)ptr);
-	printf("Free head pointer is at %d\n\n", freeHead);
-	ptr = my_alloc(12);
-	printf("\t\tReturned Ptr Address: %d\n", (int*)ptr);
-	printf("Free head pointer is at %d\n\n", freeHead);
-	//initMemory();
-	printf("Free head pointer is at %d", freeHead);
-	printf("Heap at 0 is : %c",memoryHeap[0] );
-	//hAllocate(4);
-	printf("Heap at 0 is : %c", memoryHeap[0]);
+
+	void *myInt = my_alloc(5);
+
+	printf("After allocating, the address of the int is: %d", &myInt);
+
+	myFree(myInt);
+
+	void *myBigInt = my_alloc(24);
+	
+	printf("After allocating, the address of the int is: %d", &myBigInt);
+
+	myFree(myBigInt);
 
 	return 0;
 }
@@ -96,8 +86,6 @@ void* my_alloc(int size)
 	int data;
 
 	printf("Address of pointer: %p\n", &freeHead);
-	printf("Value of pointer: %p\n", freeHead);
-	printf("Value at pointer: %d\n", (int*)freeHead);
 
 	void* ptr = freeHead;
 
@@ -106,18 +94,11 @@ void* my_alloc(int size)
 		ptr = (int*)ptr + intSize;
 	}
 
-	//ptr is at  ->| size | ptr | data | of an accomadating block
-
-	/**((int*)freeHead + intSize) = 0;
-	*(int*)(freeHead) = poolSize - overHead;
-
-	printf("Initial data block left: %d\n", *(int*)freeHead);
-
-	printf("Initial next pointer: %d\n", *((int*)freeHead + intSize));*/
-
 	*(int*)(ptr) = size;
 	*((int*)ptr + intSize) = (int*)ptr + overHead + size;
+
 	poolSize -= (size + overHead);
+	
 	*((int*)ptr + size + overHead) = poolSize;
 	
 	freeHead = (int*)ptr + overHead + size;
@@ -134,7 +115,6 @@ void* my_alloc(int size)
 	// Find a suitable block
 	// If found and larger than what is required, split
 		// Request | Everything left
-
 }
 
 void* hAllocate(int sizeToAlloc)
@@ -150,15 +130,16 @@ void* hAllocate(int sizeToAlloc)
 	poolSize -= (sizeToAlloc + HdrSize);
 	printf("Pool size after allocation is %d \n", poolSize);
 
-
-
-
 	return beginOfAlloc;
 }
 
 void myFree(void *startOfData)
 {
 	// "Can be as easy as making this block the new free head"
+
+	int sizeFreed = *(int*)startOfData + overHead;
+
+	poolSize += sizeFreed;
 	freeHead = startOfData;
 }
 
