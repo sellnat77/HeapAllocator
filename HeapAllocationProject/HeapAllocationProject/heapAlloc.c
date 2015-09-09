@@ -18,6 +18,8 @@ void initMemory();
 
 void* my_alloc(int);
 void* hAllocate(int);
+
+void myFree(void);
 void hDeallocate(void*);
 
 int main()
@@ -51,6 +53,11 @@ void initMemory()
 
 void* my_alloc(int size)
 {
+	// Walk free list
+		// Do I need a list structure? or metaphorical list?
+	// Find a suitable block
+	// If found and larger than what is required, split
+		// Request | Everything left
 
 }
 
@@ -71,6 +78,11 @@ void* hAllocate(int sizeToAlloc)
 
 
 	return beginOfAlloc;
+}
+
+void myFree(void *startOfData)
+{
+
 }
 
 void hDeallocate(void* beginOfAlloc)
