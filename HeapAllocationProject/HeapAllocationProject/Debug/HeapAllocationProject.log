@@ -1,18 +1,20 @@
-﻿Build started 9/9/2015 3:57:52 PM.
+﻿Build started 9/9/2015 4:36:57 PM.
      1>Project "C:\Users\Russell\git\HeapAllocator\HeapAllocationProject\HeapAllocationProject\HeapAllocationProject.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TC /analyze- /errorReport:prompt heapAlloc.c
          heapAlloc.c
-     1>c:\users\russell\git\heapallocator\heapallocationproject\heapallocationproject\heapalloc.c(42): warning C4087: 'myFree' : declared with 'void' parameter list
-     1>c:\users\russell\git\heapallocator\heapallocationproject\heapallocationproject\heapalloc.c(48): warning C4087: 'myFree' : declared with 'void' parameter list
-     1>c:\users\russell\git\heapallocator\heapallocationproject\heapallocationproject\heapalloc.c(55): warning C4013: 'malloc' undefined; assuming extern returning int
-     1>c:\users\russell\git\heapallocator\heapallocationproject\heapallocationproject\heapalloc.c(55): warning C4047: '=' : 'void *' differs in levels of indirection from 'int'
-     1>c:\users\russell\git\heapallocator\heapallocationproject\heapallocationproject\heapalloc.c(79): warning C4047: '=' : 'void *' differs in levels of indirection from 'char'
-     1>c:\users\russell\git\heapallocator\heapallocationproject\heapallocationproject\heapalloc.c(98): warning C4047: '=' : 'int' differs in levels of indirection from 'int *'
-     1>c:\users\russell\git\heapallocator\heapallocationproject\heapallocationproject\heapalloc.c(85): warning C4101: 'nextPointer' : unreferenced local variable
-     1>c:\users\russell\git\heapallocator\heapallocationproject\heapallocationproject\heapalloc.c(84): warning C4101: 'sizeLeft' : unreferenced local variable
-     1>c:\users\russell\git\heapallocator\heapallocationproject\heapallocationproject\heapalloc.c(86): warning C4101: 'data' : unreferenced local variable
-     1>c:\users\russell\git\heapallocator\heapallocationproject\heapallocationproject\heapalloc.c(137): warning C4027: function declared without formal parameter list
+     1>c:\users\russell\git\heapallocator\heapallocationproject\heapallocationproject\heapalloc.c(43): warning C4087: 'myFree' : declared with 'void' parameter list
+     1>c:\users\russell\git\heapallocator\heapallocationproject\heapallocationproject\heapalloc.c(49): warning C4087: 'myFree' : declared with 'void' parameter list
+     1>c:\users\russell\git\heapallocator\heapallocationproject\heapallocationproject\heapalloc.c(36): warning C4101: 'k' : unreferenced local variable
+     1>c:\users\russell\git\heapallocator\heapallocationproject\heapallocationproject\heapalloc.c(66): warning C4013: 'malloc' undefined; assuming extern returning int
+     1>c:\users\russell\git\heapallocator\heapallocationproject\heapallocationproject\heapalloc.c(66): warning C4047: '=' : 'void *' differs in levels of indirection from 'int'
+     1>c:\users\russell\git\heapallocator\heapallocationproject\heapallocationproject\heapalloc.c(91): warning C4047: '=' : 'void *' differs in levels of indirection from 'char'
+     1>c:\users\russell\git\heapallocator\heapallocationproject\heapallocationproject\heapalloc.c(106): warning C4047: '=' : 'void *' differs in levels of indirection from 'int'
+     1>c:\users\russell\git\heapallocator\heapallocationproject\heapallocationproject\heapalloc.c(110): warning C4047: '=' : 'int' differs in levels of indirection from 'int *'
+     1>c:\users\russell\git\heapallocator\heapallocationproject\heapallocationproject\heapalloc.c(97): warning C4101: 'nextPointer' : unreferenced local variable
+     1>c:\users\russell\git\heapallocator\heapallocationproject\heapallocationproject\heapalloc.c(96): warning C4101: 'sizeLeft' : unreferenced local variable
+     1>c:\users\russell\git\heapallocator\heapallocationproject\heapallocationproject\heapalloc.c(98): warning C4101: 'data' : unreferenced local variable
+     1>c:\users\russell\git\heapallocator\heapallocationproject\heapallocationproject\heapalloc.c(149): warning C4027: function declared without formal parameter list
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Russell\git\HeapAllocator\HeapAllocationProject\Debug\HeapAllocationProject.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Russell\git\HeapAllocator\HeapAllocationProject\Debug\HeapAllocationProject.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Russell\git\HeapAllocator\HeapAllocationProject\Debug\HeapAllocationProject.lib" /MACHINE:X86 Debug\heapAlloc.obj
          HeapAllocationProject.vcxproj -> C:\Users\Russell\git\HeapAllocator\HeapAllocationProject\Debug\HeapAllocationProject.exe
@@ -20,4 +22,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.74
+Time Elapsed 00:00:00.79

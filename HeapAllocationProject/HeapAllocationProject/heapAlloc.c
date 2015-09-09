@@ -33,19 +33,30 @@ void hDeallocate(void*);
 
 int main()
 {
+	int k;
 	my_initialize_heap(poolSize);
 
 	void *myInt = my_alloc(5);
 
-	printf("After allocating, the address of the int is: %d", &myInt);
+	printf("\n\tAfter allocating, the address of the int is: %p", myInt);
 
 	myFree(myInt);
 
-	void *myBigInt = my_alloc(24);
-	
-	printf("After allocating, the address of the int is: %d", &myBigInt);
+	void *myBigInt = my_alloc(500);
+
+	printf("\n\tAfter allocating, the address of the int is: %p", myBigInt);
 
 	myFree(myBigInt);
+
+	printf("\n\tAfter deallocating, the address of the freeHead is: %p", freeHead);
+	int one = 1;
+	int two = 2;
+	
+	void *onePtr = my_alloc(sizeof(int));
+	void *twoPtr = my_alloc(sizeof(int));
+
+	printf("\n\tAfter allocating, the address of the int1 is: %p", onePtr);
+	printf("\n\tAfter allocating, the address of the int2 is: %p", twoPtr);
 
 	return 0;
 }
@@ -53,6 +64,7 @@ int main()
 void my_initialize_heap(int size)
 {
 	freeHead = malloc(size);
+	printf("\n\tThe address of the freeHead is: %p", freeHead);
 
 	//Null pointer
 	//*((int*)(*freeHead + intSize)) = 0;
@@ -85,13 +97,13 @@ void* my_alloc(int size)
 	int *nextPointer;
 	int data;
 
-	printf("Address of pointer: %p\n", &freeHead);
+	printf("\n\n\t\tAddress of pointer: %p\n", freeHead);
 
 	void* ptr = freeHead;
 
 	while (*(int*)ptr < size)
 	{
-		ptr = (int*)ptr + intSize;
+		ptr = *((int*)ptr + intSize);
 	}
 
 	*(int*)(ptr) = size;
@@ -101,13 +113,13 @@ void* my_alloc(int size)
 	
 	*((int*)ptr + size + overHead) = poolSize;
 	
-	freeHead = (int*)ptr + overHead + size;
+	freeHead = ((int*)ptr + overHead + size);
 
-	printf("Allocated data block left: %d\n", *(int*)ptr);
+	printf("\nAllocated data block left: %d\n", *(int*)ptr);
 
-	printf("\tAllocated next pointer: %d\n", *((int*)ptr + intSize));
+	printf("\n\tAllocated next pointer: %p\n", ((int*)ptr + intSize));
 
-	printf("Post split data block left: %d\n", *((int*)ptr+overHead+size));
+	printf("\n\t\tPost split data block left: %d\n", *((int*)ptr+overHead+size));
 
 	return ptr;
 	// Walk free list
