@@ -66,29 +66,10 @@ void my_initialize_heap(int size)
 	freeHead = malloc(size);
 	printf("\n\tThe address of the freeHead is: %p", freeHead);
 
-	//Null pointer
-	//*((int*)(*freeHead + intSize)) = 0;
 	*((int*)freeHead + intSize) = 0;
 	poolSize -= overHead;
 	*(int*)(freeHead) = poolSize;
-
-	printf("Initial data block left: %d\n", *(int*)freeHead);
-	
-	printf("Initial next pointer: %d\n", *((int*)freeHead+intSize));
-	//Break into block structure
 	// | size | pointer | ******Everything********** |
-}
-
-void initMemory()
-{
-	int k;
-
-	for (k = 0; k < poolSize; k++)
-	{
-		memoryHeap[k] = '0';
-	}	
-
-	freeHead = memoryHeap[0];
 }
 
 void* my_alloc(int size)
@@ -97,17 +78,17 @@ void* my_alloc(int size)
 	int *nextPointer;
 	int data;
 
-	printf("\n\n\t\tAddress of pointer: %p\n", freeHead);
+	printf("\n\n\t\tAddress of pointer that allocator is working with: %p\n", freeHead);
 
 	void* ptr = freeHead;
 
 	while (*(int*)ptr < size)
 	{
-		ptr = *((int*)ptr + intSize);
+		ptr = (int*)ptr + intSize;
 	}
 
 	*(int*)(ptr) = size;
-	*((int*)ptr + intSize) = (int*)ptr + overHead + size;
+	*((int*)ptr + intSize) = *(int*)ptr + overHead + size;
 
 	poolSize -= (size + overHead);
 	
