@@ -1,84 +1,64 @@
-#include <stdio.h>
-#include <math.h>
+#include "heapAlloc.h"
 
-// Get the length of an array
-#define arrElements(x) ( sizeof(x)/sizeof(x[0]) );	
-
-struct node
+void main()
 {
-	int size;
-	struct node *nextNode;
-	void* data;
-};
-
-void* freeHead;
-void* nextFree;
-void *userInput;
-
-struct node *rootNode;
-
-char memoryHeap[1000];
-int devValues[];
-int poolSize = arrElements(memoryHeap);
-int HdrSize;
-const int ptrSize = sizeof(void*);
-const int intSize = sizeof(int);
-const int overHead = sizeof(void*) + sizeof(int);
-
-void my_initialize_heap(int);
-void initMemory();
-
-void* my_alloc(int);
-void* hAllocate(int);
-
-void myFree(void);
-void hDeallocate(void*);
-
-void getInput();
-void assignInts();
-double stdDeviation();
-double getAvg();
-
-int main()
-{
-	int k;
+	//Test #1
 	my_initialize_heap(poolSize);
-	/*
-	void *myInt = my_alloc(sizeof(int));
-
-	printf("\n\tAfter allocating, the address of the int is: %p", (void*)&myInt);
-
-	myFree(myInt);
-	printf("\n\tAfter deallocating, the address of the freeHead is: %p", (void*)&freeHead);
-
-	void *myBigInt = my_alloc(sizeof(int));
-
-	printf("\n\tAfter allocating, the address of the int is: %p", (void*)&myBigInt);
-
-	myFree(myBigInt);
-
-	printf("\n\tAfter deallocating, the address of the freeHead is: %p", (void*)&freeHead);
+	printf("\nBefore allocating, the address of the freeHead is: %p\n", (void*)&freeHead);
 	
+	void *myInt = my_alloc(sizeof(int));
+	printf("\nAfter allocating, the address of the int pointer is: %p\n", (void*)&myInt);
+	printf("\nThe address of the freeHead is: %p\n", (void*)&freeHead);
+
+	my_free(myInt);
+	printf("\n\tAfter deallocating, the address of the freeHead is: %p\n", (void*)&freeHead);
+
+	printf("\nBefore allocating, the address of the freeHead is: %p\n", (void*)&freeHead);
+	
+	void *myOtherInt = my_alloc(sizeof(int));
+	printf("\nAfter allocating, the address of the int pointer is: %p\n", (void*)&myOtherInt);
+	printf("\nThe address of the freeHead is: %p\n", (void*)&freeHead);
+
+	my_free(myOtherInt);
+	printf("\n\tAfter deallocating, the address of the freeHead is: %p\n", (void*)&freeHead);
+	
+	printf("\nMoving to test #2\n");
+	system("pause");
+	system("cls");
+
+	//Test #2
+	my_initialize_heap(poolSize);	
 	int one = 1;
 	int two = 1;
 	
 	void *onePtr = my_alloc(sizeof(int));
 	void *twoPtr = my_alloc(sizeof(int));
 
-	printf("\n\tAfter allocating, the address of the int1 is: %p", (void*)&onePtr);
-	printf("\n\tAfter allocating, the address of the int2 is: %p", (void*)&twoPtr);
+	printf("\nAfter allocating, the address of the int1 is: %p", (void*)&onePtr);
+	printf("\nAfter allocating, the address of the int2 is: %p", (void*)&twoPtr);
 	
+	my_free(onePtr);
+	my_free(twoPtr);
+	
+
+	printf("\nMoving to test #3\n");
+	system("pause");
+	system("cls");
+
+	//Test #3
+	my_initialize_heap(poolSize);
+
 	void *first = my_alloc(sizeof(int));
 	void *second = my_alloc(sizeof(int));
 	void *third = my_alloc(sizeof(int));
 
-	printf("\n\tAfter allocating, the address of the first is: %p", (void*)&first);
-	printf("\n\tAfter allocating, the address of the second is: %p", (void*)&second);
-	printf("\n\tAfter allocating, the address of the third is: %p", (void*)&third);
+	printf("\nAfter allocating, the address of the first is: %p", (void*)&first);
+	printf("\nAfter allocating, the address of the second is: %p", (void*)&second);
+	printf("\nAfter allocating, the address of the third is: %p", (void*)&third);
 
 	void *freedAddress = (void*)&second;
 
-	myFree(second);
+	my_free(second);
 
 	printf("\n\tAfter deallocating, the address of the freeHead is: %p", (void*)&freeHead);
 
@@ -88,52 +68,80 @@ int main()
 
 	void *fourth = my_alloc(sizeof(int));
 
-	printf("\n\tAfter allocating, the address of the fourth is: %p == %p", (void*)&fourth, (void*)&freedAddress);
+	printf("\nAfter allocating, the address of the fourth is: %p == %p", (void*)&fourth, (void*)&freedAddress);
 	
+	my_free(first);
+	my_free(third);
+	my_free(fourth);
+	my_free(myDoub);
+
+	printf("\nMoving to test #4\n");
+	system("pause");
+	system("cls");
+
+	//Test #4
+	my_initialize_heap(poolSize);
 
 	void *myChar = my_alloc(sizeof(char));
-	void *myInt = my_alloc(sizeof(int));
+	void *myIntTest = my_alloc(sizeof(int));
 
-	printf("\n\tAfter allocating, the address of the myChar is: %p", (void*)&myChar);
-	printf("\n\tAfter allocating, the address of the myInt is: %p", (void*)&myInt);
+	printf("\nAfter allocating, the address of the myChar is: %p", (void*)&myChar);
+	printf("\nAfter allocating, the address of the myInt is: %p", (void*)&myIntTest);
 	
+	my_free(myChar);
+	my_free(myIntTest);
 
+	printf("\nMoving to test #5\n");
+	system("pause");
+	system("cls");
+
+	//Test #5
 	void *intArr = my_alloc(100 * sizeof(int));
 
-	printf("\n\tAfter allocating, the address of the intArr is: %p", (void*)&intArr);
-	*/
+	printf("\nAfter allocating, the address of the intArr is: %p", (void*)&intArr);
+
+	my_free(intArr);
+
+	printf("\nMoving to standard deviation program\n");
+	system("pause");
+	system("cls");
+	
+	//Standard deviation program
+	my_initialize_heap(poolSize);
 
 	getInput();
 	assignInts();
-	printf("\n\n\n\tThe std Deviation is %f",stdDeviation());
+	printf("\n\n\n\tThe std Deviation is %f\n\n", stdDeviation());
 
-	return 0;
+	system("pause");
 }
 
 void my_initialize_heap(int size)
 {
 	freeHead = malloc(size);
-	printf("\n\tThe address of the freeHead is: %p", freeHead);
+	printf("\n\tThe address of the freeHead is: %p", (void*)&freeHead);
 
 	*((int*)freeHead + intSize) = 0;
 	poolSize = poolSize - overHead;
 	*(int*)(freeHead) = poolSize;
-	// | size | pointer | ******Everything********** |
 }
 
 void* my_alloc(int size)
 {
+	if (size < sizeof(void*))
+	{
+		size = sizeof(void*);
+	}
 	int sizeLeft;
 	int *nextPointer;
 	int data;
 
-	printf("\n\n\t\tAddress of pointer that allocator is working with: %p\n", freeHead);
+	//printf("\n\n\t\tAddress of pointer that allocator is working with: %p\n", freeHead);
 
 	void* ptr = freeHead;
 
 	while (*(int*)ptr < size)
 	{
-			//Next Node
 		ptr = (int*)ptr + intSize;
 	}
 
@@ -146,33 +154,34 @@ void* my_alloc(int size)
 	
 	freeHead = ((int*)ptr + overHead + size);
 
-	printf("\nAllocated data block left: %d\n", *(int*)ptr);
+	//printf("\nAllocated data block left: %d\n", *(int*)ptr);
 
-	printf("\n\tAllocated next pointer: %p\n", ((int*)ptr + intSize));
+	//printf("\n\tAllocated next pointer: %p\n", ((int*)ptr + intSize));
 
-	printf("\n\t\tPost split data block left: %d\n", *((int*)ptr+overHead+size));
+	//printf("\n\t\tPost split data block left: %d\n", *((int*)ptr+overHead+size));
 
 	return ptr;
 }
 
-void myFree(void *startOfData)
+void my_free(void *startOfData)
 {
-	// "Can be as easy as making this block the new free head"
-
 	int sizeFreed = *(int*)startOfData + overHead;
 
 	poolSize += sizeFreed;
 	freeHead = startOfData;
 }
 
+///////////////////////////////////////////////////
+//Standard dev program
+
 void getInput()
 {
 	int value;
-	
-	printf("Please enter a positive integer n");
-	scanf_s("%d",&value);
 
-	userInput = my_alloc(value*sizeof(int));
+	printf("\n\nPlease enter a positive integer for data set: ");
+	scanf_s("%d", &value);
+
+	stdDevNums = my_alloc(value*sizeof(int));
 }
 
 void assignInts()
@@ -180,15 +189,14 @@ void assignInts()
 	int val;
 	int k;
 
-	int sizeOfAllocated = (*((int*)userInput))/sizeof(int);
+	int sizeOfAllocated = (*((int*)stdDevNums)) / sizeof(int);
 
 	for (k = 0; k < sizeOfAllocated; k++)
 	{
-		printf("\nPlease enter a positive integer n");
+		printf("\nPlease enter a positive integer: ");
 		scanf_s("%d", &val);
 
-		*((int*)userInput + overHead+(k*sizeof(int))) = val;
-		printf("Entered %d\n\n", *((int*)userInput + overHead + (k*sizeof(int))));
+		*((int*)stdDevNums + overHead + (k*sizeof(int))) = val;
 	}
 }
 
@@ -198,24 +206,21 @@ double stdDeviation()
 	double std = 0;
 	double avg = getAvg();
 
-	printf("The average is %3.2f", avg);
+	printf("\nThe average is %3.2f\n", avg);
 
-	int devValuesCount = (*((int*)userInput)) / sizeof(int);
+	int devValuesCount = (*((int*)stdDevNums)) / sizeof(int);
 
 	for (k = 0; k < devValuesCount; k++)
 	{
-		int value = *((int*)userInput + overHead + (k*sizeof(int)));
+		int value = *((int*)stdDevNums + overHead + (k*sizeof(int)));
 		std = std + ((value - avg) * (value - avg));
 	}
 
-	printf("Dividing by %d", devValuesCount);
-
 	std = std / devValuesCount;
 
-	printf("Trying to take sqrt of %f", std);
+	printf("\nVariance = %f\n", std);
 
 	std = (double)sqrt(std);
-	printf("\n\n\tResult of sqrt %f", std);
 
 	return std;
 }
@@ -225,13 +230,13 @@ double getAvg()
 	int k;
 	double avg = 0;
 
-	int devValuesCount = (*((int*)userInput)) / sizeof(int);
+	int devValuesCount = (*((int*)stdDevNums)) / sizeof(int);
 
 	for (k = 0; k < devValuesCount; k++)
 	{
-		avg += (*((int*)userInput + overHead + (k*sizeof(int))));
+		avg += (*((int*)stdDevNums + overHead + (k*sizeof(int))));
 	}
-	avg = avg/devValuesCount;
+	avg = avg / devValuesCount;
 
 	return avg;
 }
