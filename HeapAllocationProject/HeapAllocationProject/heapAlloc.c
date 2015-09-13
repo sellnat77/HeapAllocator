@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <math.h>
 
 // Get the length of an array
 #define arrElements(x) ( sizeof(x)/sizeof(x[0]) );	
@@ -204,20 +205,17 @@ double stdDeviation()
 	for (k = 0; k < devValuesCount; k++)
 	{
 		int value = *((int*)userInput + overHead + (k*sizeof(int)));
-
-		printf("\nEXPRESSION: %d - %f Squared = %f ", value, avg, pow(((double)value - avg), 2));
-		printf("\n%d - %f = %f", value, avg, (value - avg));
-		printf("\nSQUARED = %f\n", ((value - avg) * (value - avg)));
 		std = std + ((value - avg) * (value - avg));
 	}
 
 	printf("Dividing by %d", devValuesCount);
 
-	std = std / (double)devValuesCount;
+	std = std / devValuesCount;
 
 	printf("Trying to take sqrt of %f", std);
 
-	std = sqrt(std);
+	std = (double)sqrt(std);
+	printf("\n\n\tResult of sqrt %f", std);
 
 	return std;
 }
