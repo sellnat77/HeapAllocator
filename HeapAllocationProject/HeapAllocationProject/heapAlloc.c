@@ -99,10 +99,15 @@ void main()
 	//Test #5
 	my_initialize_heap(poolSize);
 	void *intArr = my_alloc(100 * sizeof(int));
+	void *extraInt = my_alloc(sizeof(int));
 
 	printf("\nAfter allocating, the address of the intArr is: %p", (void*)&intArr);
+	printf("\nAfter allocating, the address of the extraInt is: %p", (void*)&extraInt);
 
 	my_free(intArr);
+
+	printf("\n\tAfter deallocating, the address of the freeHead is: %p", (void*)&freeHead);
+	printf("\n\tAfter deallocating, the address of the extraInt is: %p", (void*)&extraInt);
 
 	printf("\nMoving to standard deviation program\n");
 	system("pause");
