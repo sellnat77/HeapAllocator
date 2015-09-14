@@ -2,6 +2,7 @@
 
 void main()
 {
+	
 	//Test #1
 	my_initialize_heap(poolSize);
 	printf("\nBefore allocating, the address of the freeHead is: %p\n", (void*)&freeHead);
@@ -96,6 +97,7 @@ void main()
 	system("cls");
 
 	//Test #5
+	my_initialize_heap(poolSize);
 	void *intArr = my_alloc(100 * sizeof(int));
 
 	printf("\nAfter allocating, the address of the intArr is: %p", (void*)&intArr);
@@ -146,7 +148,7 @@ void* my_alloc(int size)
 	}
 
 	*(int*)(ptr) = size;
-	*((int*)ptr + intSize) = overHead + size;
+	*((int*)ptr + intSize) = (overHead + size);
 
 	poolSize = poolSize - (size + overHead);
 	
