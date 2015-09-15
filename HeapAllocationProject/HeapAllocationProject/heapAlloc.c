@@ -2,7 +2,7 @@
 
 void main()
 {
-	
+	/*
 	//Test #1
 	my_initialize_heap(poolSize);
 	printf("\nBefore allocating, the address of the freeHead is: %p\n", (void*)&freeHead);
@@ -45,7 +45,7 @@ void main()
 	printf("\nMoving to test #3\n");
 	system("pause");
 	system("cls");
-
+	*/
 	//Test #3
 	my_initialize_heap(poolSize);
 
@@ -53,23 +53,26 @@ void main()
 	void *second = my_alloc(sizeof(int));
 	void *third = my_alloc(sizeof(int));
 
-	printf("\nAfter allocating, the address of the first is: %p", (void*)&first);
-	printf("\nAfter allocating, the address of the second is: %p", (void*)&second);
-	printf("\nAfter allocating, the address of the third is: %p", (void*)&third);
+	printf("\nAfter allocating, the address of the first is: %p", (void*)first);
+	printf("\nAfter allocating, the address of the second is: %p", (void*)second);
+	printf("\nAfter allocating, the address of the third is: %p", (void*)third);
 
 	void *freedAddress = (void*)&second;
+	printf("\nStoring second address for comparison: %p", (void*)freedAddress);
 
-	my_free(second);
+	my_free((void*)second);
+	
+	printf("\n\t\tStoring second address after deallocating for comparison: %p", (void*)freedAddress);
 
-	printf("\n\tAfter deallocating, the address of the freeHead is: %p", (void*)&freeHead);
+	printf("\n\tAfter deallocating second, the address of the freeHead is: %p", (void*)freeHead);
 
 	void *myDoub = my_alloc(sizeof(double));
 
-	printf("\n\tAfter allocating, the address of the myDoub is: %p", (void*)&myDoub);
+	printf("\n\tAfter allocating, the address of the myDoub is: %p", (void*)myDoub);
 
 	void *fourth = my_alloc(sizeof(int));
 
-	printf("\nAfter allocating, the address of the fourth is: %p == %p", (void*)&fourth, (void*)&freedAddress);
+	printf("\nAfter allocating, the address of the fourth is: %p == %p", (void*)fourth, (void*)freedAddress);
 	
 	my_free(first);
 	my_free(third);
@@ -79,7 +82,7 @@ void main()
 	printf("\nMoving to test #4\n");
 	system("pause");
 	system("cls");
-
+	/*
 	//Test #4
 	my_initialize_heap(poolSize);
 
@@ -121,6 +124,7 @@ void main()
 	printf("\n\n\n\tThe std Deviation is %f\n\n", stdDeviation());
 
 	system("pause");
+	*/
 }
 
 void my_initialize_heap(int size)
@@ -131,27 +135,32 @@ void my_initialize_heap(int size)
 	*((int*)freeHead + intSize) = 0;
 	poolSize = poolSize - overHead;
 	*(int*)(freeHead) = poolSize;
+	printf("\n\n\t\t\t%d Pointer should be null!", *((int*)freeHead+intSize));
 }
 
 void* my_alloc(int size)
 {
-	if (size < sizeof(void*))
+	if (size % ptrSize != 0)
 	{
-		size = sizeof(void*);
+		size = size % ptrSize;
 	}
 	int sizeLeft;
 	int *nextPointer;
 	int data;
 
-	//printf("\n\n\t\tAddress of pointer that allocator is working with: %p\n", freeHead);
+	printf("\n\n\t\tAddress of pointer that allocator is working with: %p\n", (void*)freeHead);
 
 	void* ptr = freeHead;
 
-	while (*(int*)ptr < size)
+	if (*((int*)ptr + intSize) != 0)
 	{
-		ptr = (int*)ptr + intSize;
+		printf("\n\n\t\t\t%d | %d free list is not null! walking free list", (*(int*)ptr),size);
+		while (*(int*)ptr < size)
+		{
+			printf("Compared %d | %d", *(int*)ptr, size);
+			(int*)ptr = (int*)ptr + intSize;
+		}
 	}
-
 	*(int*)(ptr) = size;
 	*((int*)ptr + intSize) = (overHead + size);
 
@@ -159,7 +168,7 @@ void* my_alloc(int size)
 	
 	*((int*)ptr + size + overHead) = poolSize;
 	
-	freeHead = ((int*)ptr + overHead + size);
+	//freeHead = ((int*)ptr + size + overHead);
 
 	//printf("\nAllocated data block left: %d\n", *(int*)ptr);
 
@@ -172,10 +181,13 @@ void* my_alloc(int size)
 
 void my_free(void *startOfData)
 {
+	printf("\n\n\n\n\tDeallocator has been given address: %p", (void*)startOfData);
+	freeHead = (void*)startOfData;
+
 	int sizeFreed = *(int*)startOfData + overHead;
 
 	poolSize += sizeFreed;
-	freeHead = startOfData;
+	
 }
 
 ///////////////////////////////////////////////////
