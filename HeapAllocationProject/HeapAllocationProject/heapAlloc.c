@@ -1,198 +1,259 @@
-#include <stdio.h>
+#include "heapAlloc.h"
 
-// Get the length of an array
-#define arrElements(x) ( sizeof(x)/sizeof(x[0]) );	
-
-void* freeHead;
-void* nextFree;
-
-char memoryHeap[1000];
-int poolSize = arrElements(memoryHeap);
-int HdrSize;
-
-struct memoryBlock
+void main()
 {
+	
+	//Test #1
+	my_initialize_heap(poolSize);
+	printf("\nBefore allocating, the address of the freeHead is: %p\n", freeHead);
+	
+	void *myInt = my_alloc(sizeof(int));
+	printf("\nAfter allocating, the address of the int pointer is: %p\n", myInt);
+	printf("\nThe address of the freeHead is: %p\n", freeHead);
+
+	my_free(myInt);
+	printf("\n\tAfter deallocating, the address of the freeHead is: %p\n", freeHead);
+
+	printf("\nBefore allocating, the address of the freeHead is: %p\n", freeHead);
+	
+	void *myOtherInt = my_alloc(sizeof(int));
+	printf("\nAfter allocating, the address of the int pointer is: %p\n", myOtherInt);
+	printf("\nThe address of the freeHead is: %p\n", freeHead);
+
+	my_free(myOtherInt);
+	printf("\n\tAfter deallocating, the address of the freeHead is: %p\n", freeHead);
+	
+	printf("\nMoving to test #2\n");
+	system("pause");
+	system("cls");
+
+	//Test #2
+	my_initialize_heap(poolSize);	
+	int one = 1;
+	int two = 1;
+	
+	void *onePtr = my_alloc(sizeof(int));
+	void *twoPtr = my_alloc(sizeof(int));
+
+	printf("\nAfter allocating, the address of the int1 is: %p", (void*)&onePtr);
+	printf("\nAfter allocating, the address of the int2 is: %p", (void*)&twoPtr);
+	
+	my_free(onePtr);
+	my_free(twoPtr);
+	
+
+	printf("\nMoving to test #3\n");
+	system("pause");
+	system("cls");
+	
+	//Test #3
+	my_initialize_heap(poolSize);
+
+	void *first = my_alloc(sizeof(int));
+	void *second = my_alloc(sizeof(int));
+	void *third = my_alloc(sizeof(int));
+
+	printf("\nAfter allocating, the address of the first is: %p", first);
+	printf("\nAfter allocating, the address of the second is: %p", second);
+	printf("\nAfter allocating, the address of the third is: %p", third);
+
+	void *freedAddress = second;
+	printf("\nStoring second address for comparison: %p", freedAddress);
+
+	my_free(second);
+	
+	printf("\n\t\tStoring second address after deallocating for comparison: %p", freedAddress);
+
+	printf("\n\tAfter deallocating second, the address of the freeHead is: %p", freeHead);
+
+	void *myDoub = my_alloc(sizeof(double));
+
+	printf("\n\tAfter allocating, the address of the myDoub is: %p", myDoub);
+
+	void *fourth = my_alloc(sizeof(int));
+
+	printf("\nAfter allocating, the address of the fourth is: %p == %p", fourth,freedAddress);
+	
+	my_free(first);
+	my_free(third);
+	my_free(fourth);
+	my_free(myDoub);
+
+	printf("\nMoving to test #4\n");
+	system("pause");
+	system("cls");
+	
+	//Test #4
+	my_initialize_heap(poolSize);
+
+	void *myChar = my_alloc(sizeof(char));
+	void *myIntTest = my_alloc(sizeof(int));
+
+	printf("\nAfter allocating, the address of the myChar is: %p", (void*)&myChar);
+	printf("\nAfter allocating, the address of the myInt is: %p", (void*)&myIntTest);
+	
+	my_free(myChar);
+	my_free(myIntTest);
+
+	printf("\nMoving to test #5\n");
+	system("pause");
+	system("cls");
+	
+	//Test #5
+	my_initialize_heap(poolSize);
+	void *intArr = my_alloc((100 * sizeof(int)));
+	printf("\n\tAfter allocating array, the address of the freeHead is: %p", (int *)&freeHead);
+	void *extraInt = my_alloc(sizeof(int));
+	printf("\n\tAfter allocating int, the address of the freeHead is: %p", (int *)&freeHead);
+
+	printf("\nAfter allocating, the address of the intArr is: %p", (int *)&intArr);
+	printf("\nAfter allocating, the address of the extraInt is: %p", (int *)&extraInt);
+
+	my_free(intArr);
+
+	printf("\n\tAfter deallocating, the address of the freeHead is: %p", (int *)&freeHead);
+	printf("\n\tAfter deallocating, the address of the extraInt is: %p", (int *)&extraInt);
+
+	my_free(extraInt);
+
+	printf("\nMoving to standard deviation program\n");
+	system("pause");
+	system("cls");
+	
+	
+	//Standard deviation program
+	my_initialize_heap(poolSize);
+
+	getInput();
+	assignInts();
+	printf("\n\n\n\tThe std Deviation is %f\n\n", stdDeviation());
+
+	system("pause");
+	
+}
+
+void my_initialize_heap(int size)
+{
+	freeHead = malloc(size);
+	printf("\n\tThe address of the freeHead is: %p", freeHead);
+
+	*((int*)freeHead + intSize) = 0;
+	poolSize = poolSize - overHead;
+	*(int*)(freeHead) = poolSize;
+}
+
+void* my_alloc(int size)
+{
+	if (size % ptrSize != 0)
+	{
+		size = size + (size % ptrSize);
+	}
 	int sizeLeft;
-	int* nextPointer;
-	int sizeToAlloc;
-};
+	int *nextPointer;
+	int data;
+	int count = 0;
 
-void initMemory();
-void* hAllocate(int);
-void hDeallocate(int*);
-void printHeap();
-
-int main()
-{
-	initMemory();
-	printHeap();
-	printf("\n");
-	printf("\nFree head pointer is at %d\n", &freeHead);
-	printf("\nHeap at 0 is : %c\n",memoryHeap[0] );
-	int* a = hAllocate(8);
-	printf("\nAddress of allocation is : %d\n", &a);
-	printf("\nValue of allocation in heap is : %d\n", a);
-	printHeap();
-	hDeallocate(a);
-	printf("\n");
-	printf("\nFree head pointer is at %d\n", &freeHead);
-	printf("\nHeap at 0 is : %c\n", memoryHeap[0]);
-	a = hAllocate(16);
-	printf("\nAddress of allocation is : %d\n", &a);
-	printf("\nValue of allocation in heap is : %d\n", a);
-	printf("\n\n\n\n");
-	printHeap();
-	printf("\nFree head pointer is at %d\n", &freeHead);
-	printf("\nHeap at 0 is : %c\n", memoryHeap[0]);
-	a = hAllocate(50);
-	printf("\nAddress of allocation is : %d\n", &a);
-	printf("\nValue of allocation in heap is : %d\n", a);
-	printf("\n\n\n\n");
-	printHeap();
-	printf("\nFree head pointer is at %d\n", &freeHead);
-	printf("\nHeap at 0 is : %c\n", memoryHeap[0]);
-	hAllocate(20);
-	printf("\n\n\n\n");
-	printHeap();
-	printf("\nFree head pointer is at %d\n", &freeHead);
-	printf("\nHeap at 0 is : %c\n", memoryHeap[0]);
-	hAllocate(10);
-	printf("\n\n\n\n");
-	printHeap();
-	printf("\nFree head pointer is at %d\n", &freeHead);
-	printf("\nHeap at 0 is : %c\n", memoryHeap[0]);
-	hAllocate(800);
-	printf("\n\n\n\n");
-	printHeap();
-	printf("\nFree head pointer is at %d\n", &freeHead);
-	printf("\nHeap at 0 is : %c\n", memoryHeap[0]);
-	hAllocate(800);
-	printf("\n\n\n\n");
-	printHeap();
-	printf("\nFree head pointer is at %d\n", &freeHead);
-	printf("\nHeap at 0 is : %c\n", memoryHeap[0]);
-	hAllocate(40);
-	printf("\n\n\n\n");
-	printHeap();
-	printf("\nFree head pointer is at %d\n", &freeHead);
-	printf("\nHeap at 0 is : %c\n", memoryHeap[0]);
-	hAllocate(1);
-	printf("\n\n\n\n");
-	printHeap();
-	return 0;
-}
-
-void initMemory()
-{
-	int k;
-
-	for (k = 0; k < poolSize; k++)
+	void* ptr = freeHead;
+	if (*((int*)ptr + intSize) != 0)
 	{
-		memoryHeap[k] = '0';
-	}	
-
-	freeHead = memoryHeap[0];
-}
-
-void* hAllocate(int sizeToAlloc)
-{
-	//Instantiate a pointer for "next free"
-	//Instantiate size var
-	//Instantiate pointer var
-	//Calculate size of remaining data bits
-	//Assign size var
-	//Calculate address of next pointer
-	//Assign pointer var
-	//Calculate size of header
-	void* beginOfAlloc = NULL;
-
-	struct memoryBlock allocBlock;
-
-	allocBlock.sizeLeft = poolSize - sizeToAlloc;
-	allocBlock.sizeToAlloc = sizeToAlloc;
-	allocBlock.nextPointer = &memoryHeap[9];
-
-	HdrSize = sizeof(allocBlock.sizeLeft) + sizeof(allocBlock.nextPointer);
-
-	if (sizeToAlloc + HdrSize > poolSize)
-	{
-		printf("ERROR OUT OF MEMORY");
-	}
-	else
-	{
-		printf("\nSize of header is %d \n", HdrSize);
-
-		printf("Pool size before allocation is %d \n", poolSize);
-
-		//Allocation
-		//place sizeLeft
-		int arrayEles = arrElements(memoryHeap);
-		int sizeLeftIdx = arrayEles - poolSize;
-
-		printf("\n\tNumber of arr elements = %d", arrayEles);
-		printf("\n\tPool Size = %d", poolSize);
-		printf("\n\tPool Size minus memoryHeap = %d", (arrayEles - poolSize));
-		printf("\n\tSize left index = %d", sizeLeftIdx);
-		memoryHeap[sizeLeftIdx] = (char)allocBlock.sizeLeft;
-		//place pointer
-		int ptrIdx = sizeLeftIdx + sizeof(sizeLeftIdx);
-		printf("\n\tPointer left index = %d", ptrIdx);
-		memoryHeap[ptrIdx] = (char)allocBlock.nextPointer;
-
-		int dataIdx = ptrIdx + sizeof(ptrIdx);
-		printf("\n\tData index = %d", dataIdx);
-
-		beginOfAlloc = dataIdx;
-		freeHead = &memoryHeap[dataIdx] + sizeToAlloc;
-		//place data
-		int k;
-
-		for (k = 0; k < sizeToAlloc; k++)
+		while (*(int*)ptr < size)
 		{
-			memoryHeap[dataIdx + (k + 1)] = '.';
+			count++;
+			(int*)ptr = (int*)ptr + intSize;
 		}
-
-		poolSize -= (sizeToAlloc + HdrSize);
-		printf("Pool size after allocation is %d \n", poolSize);
 	}
-	return beginOfAlloc;
+	*(int*)(ptr) = size;
+	*((int*)ptr + intSize) = (overHead + size);
+
+	poolSize = poolSize - (size + overHead);
+	
+	*((int*)ptr + size + overHead) = poolSize;
+	
+	if (count == 0)
+	{
+		//Moving free ptr to next open block
+		freeHead = ((int *)ptr + size + overHead);
+	}
+	
+	return ptr;
 }
 
-void hDeallocate(int* beginOfAlloc)
+void my_free(void *startOfData)
 {
-	int k;
-	int size;
-	int ptr;
-	int dataidx = beginOfAlloc;
-	printf("Data is ");
-	for (k = 0; k < sizeof(int); k++)
-	{
-		printf("%d", (int)memoryHeap[(dataidx-1)-(k+1)]);
-	}
-	printf("\n\nBefore deallocation: ");
-	for (k = 0; k < sizeof(int); k++)
-	{
-		printf("%c", memoryHeap[dataidx - (k + 1)]);
-	}
-	for (k = 0; k < sizeof(int); k++)
-	{
-		memoryHeap[(dataidx - 1) + k] = '0';
-	}
-	printf("\n\nAfter deallocation:");
-	for (k = 0; k < sizeof(int); k++)
-	{
-		printf("%c", memoryHeap[dataidx - (k + 1)]);
-	}
+	freeHead = (void*)startOfData;
 
-	printf("\n\n\n");	
+	int sizeFreed = *(int*)startOfData + overHead;
+
+	poolSize += sizeFreed;
+	
 }
 
-void printHeap()
+///////////////////////////////////////////////////
+//Standard dev program
+
+void getInput()
+{
+	int value;
+
+	printf("\n\nPlease enter a positive integer for data set: ");
+	scanf_s("%d", &value);
+
+	stdDevNums = my_alloc(value*sizeof(int));
+}
+
+void assignInts()
+{
+	int val;
+	int k;
+
+	int sizeOfAllocated = (*((int*)stdDevNums)) / sizeof(int);
+
+	for (k = 0; k < sizeOfAllocated; k++)
+	{
+		printf("\nPlease enter a positive integer: ");
+		scanf_s("%d", &val);
+
+		*((int*)stdDevNums + overHead + (k*sizeof(int))) = val;
+	}
+}
+
+double stdDeviation()
 {
 	int k;
-	int memElements = arrElements(memoryHeap);
-	for (k = 0; k < memElements; k++)
+	double std = 0;
+	double avg = getAvg();
+
+	printf("\nThe average is %3.2f\n", avg);
+
+	int devValuesCount = (*((int*)stdDevNums)) / sizeof(int);
+
+	for (k = 0; k < devValuesCount; k++)
 	{
-		printf("%c",memoryHeap[k]);
+		int value = *((int*)stdDevNums + overHead + (k*sizeof(int)));
+		std = std + ((value - avg) * (value - avg));
 	}
+
+	std = std / devValuesCount;
+
+	printf("\nVariance = %f\n", std);
+
+	std = (double)sqrt(std);
+
+	return std;
+}
+
+double getAvg()
+{
+	int k;
+	double avg = 0;
+
+	int devValuesCount = (*((int*)stdDevNums)) / sizeof(int);
+
+	for (k = 0; k < devValuesCount; k++)
+	{
+		avg += (*((int*)stdDevNums + overHead + (k*sizeof(int))));
+	}
+	avg = avg / devValuesCount;
+
+	return avg;
 }
