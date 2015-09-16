@@ -140,7 +140,6 @@ void my_initialize_heap(int size)
 	*((int*)freeHead + intSize) = 0;
 	poolSize = poolSize - overHead;
 	*(int*)(freeHead) = poolSize;
-	printf("\n\n\t\t\t%d Pointer should be null!", *((int*)freeHead+intSize));
 }
 
 void* my_alloc(int size)
@@ -154,17 +153,12 @@ void* my_alloc(int size)
 	int data;
 	int count = 0;
 
-	printf("\n\n\t\tAddress of pointer that allocator is working with: %p\n", freeHead);
-
 	void* ptr = freeHead;
-	printf("\n\n\t\t\t%d | %d REQUEST", (*(int*)ptr), size);
 	if (*((int*)ptr + intSize) != 0)
 	{
-		printf("\n\n\t\t\t%d | %d free list is not null! walking free list", (*(int*)ptr),size);
 		while (*(int*)ptr < size)
 		{
 			count++;
-			printf("Compared %d | %d", *(int*)ptr, size);
 			(int*)ptr = (int*)ptr + intSize;
 		}
 	}
@@ -172,8 +166,6 @@ void* my_alloc(int size)
 	*((int*)ptr + intSize) = (overHead + size);
 
 	poolSize = poolSize - (size + overHead);
-
-	printf("\n\n\n\nPool size %d", poolSize);
 	
 	*((int*)ptr + size + overHead) = poolSize;
 	
@@ -181,22 +173,13 @@ void* my_alloc(int size)
 	{
 		//Moving free ptr to next open block
 		freeHead = ((int *)ptr + size + overHead);
-		printf("\n\n\t\tMoving free head to : %p\n", (int *)&freeHead);
 	}
 	
-
-	//printf("\nAllocated data block left: %d\n", *(int*)ptr);
-
-	//printf("\n\tAllocated next pointer: %p\n", ((int*)ptr + intSize));
-
-	//printf("\n\t\tPost split data block left: %d\n", *((int*)ptr+overHead+size));
-
 	return ptr;
 }
 
 void my_free(void *startOfData)
 {
-	printf("\n\n\n\n\tDeallocator has been given address: %p", startOfData);
 	freeHead = (void*)startOfData;
 
 	int sizeFreed = *(int*)startOfData + overHead;
